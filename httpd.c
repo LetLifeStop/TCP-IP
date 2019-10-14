@@ -2,7 +2,7 @@
 	> File Name: http.c
 	> Author: 
 	> Mail: 
-	> Created Time: 2019年09月30日 星期一 16时32分14秒
+	> Created Time: 2019�?09�?30�? 星期一 16�?32�?14�?
  ************************************************************************/
  
 #include<stdio.h>
@@ -104,15 +104,15 @@ void* accept_request(void *arg){
         if((st.st_mode & S_IFMT) == S_IFDIR){
             strcat(path, "/index.html");
         }
-        // 如果不是cgi, 就直接把服务器文件返回
+        // 如果不是cgi, 就直接把服务器文件返�?
         if((st.st_mode & S_IXUSR) || (st.st_mode & S_IXGRP) || 
            (st.st_mode & S_IXOTH))
         cgi = 1;
         if(!cgi)
         serve_file(client, path);
         else 
-        // client 客户端对应的socket,　path 是对应的路径，method是请求方法
-        // query_string 是请求的内容
+        // client 客户�?对应的socket,　path �?对应的路径，method�?请求方法
+        // query_string �?请求的内�?
         execute_cgi(client, path, method, query_string);
     }
     close(client);
@@ -129,6 +129,7 @@ void execute_cgi(int client, const char *path, const char* method, const char * 
     int cgi_output[2];
     int cgi_input[2];
     int status;
+    int content_length = -1;
     pid_t pid;
  
     if(strcasecmp(method, "GET") == 0){
@@ -190,7 +191,7 @@ void execute_cgi(int client, const char *path, const char* method, const char * 
             putenv(query_env);
         }
         else {
-            sprintf(query_env, "QUERY_STRING=%s", query_string);
+            sprintf(length_env, "CONTENT_STRING=%s", content_length);
             putenv(length_env);
         }
  
@@ -269,7 +270,7 @@ void serve_file(int client, const char *filename){
         not_found(client);
     }
     else {
-        // 先把http头部信息发送过去，再把文件中的内容通过socket发送出去
+        // 先把http头部信息发送过去，再把文件�?的内容通过socket发送出�?
         headers(client, filename);
         cat(client, resource);
     }
@@ -384,8 +385,8 @@ int  startup(int *port){
         perror("create socket error");
         exit(1);
     }
-    // SO_REUSEADDR允许地址重用，每次bind的时候，
-    // 如果这个端口正在被使用，bind就会把端口抢过来  
+    // SO_REUSEADDR允�?�地址重用，每�?bind的时候，
+    // 如果这个�?口�?�在�?使用，bind就会把�??口抢过来  
     if((setsockopt(httpd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on)) < 0)){
         perror("setsockopt error");
         exit(1);
